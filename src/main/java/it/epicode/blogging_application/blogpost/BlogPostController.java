@@ -1,13 +1,14 @@
 package it.epicode.blogging_application.blogpost;
 
-import it.epicode.blogging_application.author.AuthorRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/blogPosts")
@@ -17,8 +18,11 @@ public class BlogPostController {
     private final BlogPostService blogPostService;
 
     @GetMapping
-    public List<BlogPost> getAll() {
-        return blogPostService.getAll();
+    public Page<BlogPost> getAll(@RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(defaultValue = "id") String sortBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return blogPostService.getAll(pageable);
     }
 
     @GetMapping("/{id}")

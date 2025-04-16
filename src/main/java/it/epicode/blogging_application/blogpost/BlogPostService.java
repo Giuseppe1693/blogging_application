@@ -3,11 +3,12 @@ package it.epicode.blogging_application.blogpost;
 import it.epicode.blogging_application.author.Author;
 import it.epicode.blogging_application.author.AuthorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +17,10 @@ public class BlogPostService {
     private final BlogPostRepository blogPostRepo;
     private final AuthorRepository authorRepo;
 
-    public List<BlogPost> getAll() {
-        return blogPostRepo.findAll();
+    public Page<BlogPost> getAll(Pageable pageable) {
+        return blogPostRepo.findAll(pageable);
     }
+
 
     public BlogPost getById(Long id) {
         return blogPostRepo.findById(id)
